@@ -34,27 +34,28 @@ export default function PostForm() {
   function handlePostSubmit(data: FieldValues) {
     console.log(data);
     id = id ?? createId();
-    dispatch(createPost({ ...data, id, date: data.date.tostring() }));
+    dispatch(createPost({ ...data, id }));
     navigate(`/posts/${id}`);
+    // date: data.date.toString()
   }
 
   const toggleMediaButtons = () => {
     setShowMediaButtons(!showMediaButtons);
   };
 
-  const handleAddMedia = (mediaType) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = mediaType === "picture" ? "image/*" : "video/*";
-    input.onchange = (e) => handleFileChange(e.target.files[0], mediaType);
-    input.click();
-  };
+  // const handleAddMedia = (mediaType) => {
+  //   const input = document.createElement("input");
+  //   input.type = "file";
+  //   input.accept = mediaType === "picture" ? "image/*" : "video/*";
+  //   input.onchange = (e) => handleFileChange(e.target.files[0], mediaType);
+  //   input.click();
+  // };
 
-  const handleFileChange = (file, mediaType) => {
-    console.log(`File selected: ${file.name}`);
-    setValues({ ...values, selectedFile: file });
-    setShowMediaButtons(false);
-  };
+  // const handleFileChange = (file, mediaType) => {
+  //   console.log(`File selected: ${file.name}`);
+  //   setValues({ ...values, selectedFile: file });
+  //   setShowMediaButtons(false);
+  // };
 
   return (
     <div className="post-form-container">

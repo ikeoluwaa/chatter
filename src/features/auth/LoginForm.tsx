@@ -24,8 +24,14 @@ export default function LoginForm() {
         <Form.Input
           defaultValue=""
           placeholder="Email Address"
-          {...register("email", { required: true })}
-          error={errors.email && "Email is required"}
+          {...register("email", {
+            required: true,
+            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+          })}
+          error={
+            (errors.emai?.type === "required" && "Email is required") ||
+            (errors.emai?.type === "pattern" && "Email is invalid")
+          }
         />
 
         <Form.Input
