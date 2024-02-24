@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button, Segment } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 export default function WelcomeContent() {
   return (
@@ -11,7 +11,9 @@ export default function WelcomeContent() {
             Unleash the Power of Words, Connect with Like-minded Readers and
             Writers
           </p>
-          <Button as={Link} to='/feeds'>Get started</Button>
+          <Button as={Link} to="/feeds">
+            Get started
+          </Button>
         </div>
       </div>
     </section>

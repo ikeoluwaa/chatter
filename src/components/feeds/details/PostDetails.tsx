@@ -1,9 +1,13 @@
-import { AppFeed } from '../../../app/types/feeds';
-import { Button, Icon } from 'semantic-ui-react';
+import { Link } from "react-router-dom";
+import { AppFeed } from "../../../app/types/feeds";
+import { Button, Icon } from "semantic-ui-react";
+import { useFireStore } from "../../../app/hooks/firestore/useFirestore";
 type Props = {
-  post:AppFeed
-}
-export default function PostDetails({post}:Props) {
+  post: AppFeed;
+};
+export default function PostDetails({ post }: Props) {
+  const { remove } = useFireStore("posts");
+
   return (
     <div className="feed-item">
       <div className="author-info">
@@ -18,7 +22,7 @@ export default function PostDetails({post}:Props) {
         <h2>{post.title}</h2>
         <p>{post.content}</p>
         <div className="post-image">
-          <img src={post.imageUrl} alt="Post Image" />
+          <img src={post.selectedFile} alt="Post Image" />
         </div>
       </div>
       <div className="statistics">
@@ -28,8 +32,11 @@ export default function PostDetails({post}:Props) {
         <span>Likes: {post.likes}</span>
         <span>Views: {post.views}</span>
       </div>
-      
+      <Button onClick={() => remove(post.id)} content="Delete post" />
+      <Button as={Link} to={`/manage/${post.id}`}>
+        {" "}
+        Edit Post
+      </Button>
     </div>
   );
-  
 }

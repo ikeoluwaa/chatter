@@ -3,12 +3,12 @@ import { ButtonGroup, Button } from "semantic-ui-react";
 
 export default function FeedNavigation() {
   const [selectedFeed, setSelectedFeed] = useState("forYou");
-  
+
   const handleFeedSelection = (feed: string) => {
     setSelectedFeed(feed);
     // Add logic to fetch and display the selected feed content
   };
-  
+
   return (
     <div>
       <ButtonGroup>
@@ -37,5 +37,4 @@ export default function FeedNavigation() {
       {/* Add logic to display content based on the selected feed */}
     </div>
   );
-};
-  
+}

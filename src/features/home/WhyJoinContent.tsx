@@ -1,12 +1,4 @@
-import {
-  Button,
-  Container,
-  Segment,
-  Grid,
-  GridColumn,
-  Icon,
-  Image,
-} from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
 
 export default function WhyJoinContent() {
   return (

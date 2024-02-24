@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Header, Icon, Menu, Sidebar } from "semantic-ui-react";
-
+import SignedOutButtons from "./SignedOutButtons";
+import { useAppSelector } from "../../app/store/store";
+import SignedInMenu from "./SignedInMenu";
 
 export default function SideNav() {
   const [visible, setVisible] = useState(false);
+  const { authenticated } = useAppSelector((state) => state.auth);
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -21,13 +24,15 @@ export default function SideNav() {
         visible={visible}
         width="thin"
       >
-        <Menu.Item as={NavLink} to="/" exact>
-          <Header>
-          CHATTER
-          </Header>
+        <Menu.Item as={NavLink} to="/">
+          <Header>CHATTER</Header>
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/feeds" >
-         Feed
+        <Menu.Item as={NavLink} to="/feeds">
+          Feed
+        </Menu.Item>
+
+        <Menu.Item>
+          <SignedOutButtons />
         </Menu.Item>
         <Menu.Item as={NavLink} to="/services">
           <Icon name="settings" />
@@ -36,6 +41,10 @@ export default function SideNav() {
         <Menu.Item as={Link} to="/contact">
           <Icon name="mail outline" />
           Contact
+        </Menu.Item>
+
+        <Menu.Item onClick={toggleVisibility}>
+          {authenticated ? <SignedInMenu /> : <SignedOutButtons />}{" "}
         </Menu.Item>
       </Sidebar>
 
@@ -46,10 +55,8 @@ export default function SideNav() {
               <Icon name={visible ? "close" : "sidebar"} />
             </Menu.Item>
           </Menu>
-
-         
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     </div>
   );
-};
+}

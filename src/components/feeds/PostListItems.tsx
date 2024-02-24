@@ -1,16 +1,20 @@
-import { Button, Icon} from "semantic-ui-react";
+import { Button, Icon, Image } from "semantic-ui-react";
 import { AppFeed } from "../../app/types/feeds";
 import { Link } from "react-router-dom";
 
-type Props ={
-  post:AppFeed
-}
+type Props = {
+  post: AppFeed;
+};
 
-export default function PostListItem({post} :Props) {
+export default function PostListItem({ post }: Props) {
   return (
     <div className="feed-item">
       <div className="author-info">
-        <img src="/images/avatar/small/elliot.jpg" alt="Author Avatar" />
+        <Image
+          alt="Author Avatar"
+          src={post.PhotoURL || "/user.png"}
+          size="tiny"
+        />
         <div className="author-details">
           <p>{post.author}</p>
           <p>{post.occupation}</p>
@@ -21,7 +25,7 @@ export default function PostListItem({post} :Props) {
         <h2>{post.title}</h2>
         <p>{post.content}</p>
         <div className="post-image">
-          <img src={post.imageUrl} alt="Post Image" />
+          <img src={post.PhotoURL} alt="Post Image" />
         </div>
       </div>
       <div className="statistics">
@@ -31,7 +35,12 @@ export default function PostListItem({post} :Props) {
         <span>Likes: {post.likes}</span>
         <span>Views: {post.views}</span>
       </div>
-      <Button content="View Post" as={Link} to={`/posts/${post.id}`} style={{ marginTop: "1rem" }} />
+      <Button
+        content="View Post"
+        as={Link}
+        to={`/posts/${post.id}`}
+        style={{ marginTop: "1rem" }}
+      />
     </div>
   );
 }

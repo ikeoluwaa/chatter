@@ -1,42 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Icon } from "semantic-ui-react";
-import { useAppDispatch, useAppSelector } from "../../app/store/store";
-import { createPost } from "./feedSlice";
-import { createId } from "@paralleldrive/cuid2";
+import { useAppSelector } from "../../app/store/store";
 import { FieldValues, useForm } from "react-hook-form";
+import { AppFeed } from "../../app/types/feeds";
+import { toast } from "react-toastify";
+import { useFireStore } from "../../app/hooks/firestore/useFirestore";
+import { actions } from "./feedSlice";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function PostForm() {
+  const { loadDocument, create, edit } = useFireStore("posts");
   const {
     register,
     handleSubmit,
     formState: { isValid, isSubmitting, isDirty },
-  } = useForm();
+  } = useForm({
+    mode: "onTouched",
+    defaultValues: async () => {
+      if (post) return { ...post, date: new Date(post.date) };
+    },
+  });
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   const post = useAppSelector((state) =>
-    state.posts.posts.find((e) => e.id === id)
+    state.posts.data.find((e) => e.id === id)
   );
-
-  const dispatch = useAppDispatch();
+  const { status } = useAppSelector((state) => state.posts);
   const navigate = useNavigate();
 
-  const initialValues = post ?? {
-    title: "",
-    content: "",
-    selectedFile: null,
-  };
-
-  const [values, setValues] = useState(initialValues);
   const [showMediaButtons, setShowMediaButtons] = useState(false);
 
-  function handlePostSubmit(data: FieldValues) {
-    console.log(data);
-    id = id ?? createId();
-    dispatch(createPost({ ...data, id }));
-    navigate(`/posts/${id}`);
-    // date: data.date.toString()
+  useEffect(() => {
+    if (!id) return;
+    loadDocument(id, actions);
+  }, [id, loadDocument]);
+
+  async function editPost(data: AppFeed) {
+    if (!post) return;
+    await edit(data.id, { ...data });
+  }
+
+  async function createPost(data: FieldValues) {
+    const currentDate = new Date().toISOString();
+    const ref = await create({ ...data, date: currentDate });
+    return ref;
+  }
+
+  async function handlePostSubmit(data: FieldValues) {
+    try {
+      if (post) {
+        await editPost({ ...post, ...data });
+        navigate(`/posts/${post.id}`);
+      } else {
+        const ref = await createPost(data);
+        navigate(`/posts/${ref?.id}`);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
   }
 
   const toggleMediaButtons = () => {
@@ -57,9 +81,15 @@ export default function PostForm() {
   //   setShowMediaButtons(false);
   // };
 
+  if (status === "loading") return <LoadingComponent />;
   return (
     <div className="post-form-container">
       <Form onSubmit={handleSubmit(handlePostSubmit)} className="post-form">
+        <input
+          type="hidden"
+          defaultValue={post?.date || ""}
+          {...register("date")}
+        />
         <Button
           as={Link}
           to="/feeds"
@@ -79,10 +109,10 @@ export default function PostForm() {
             Publish
           </Button>
 
-          {values.selectedFile && (
+          {post?.selectedFile && (
             <div className="selected-image-container">
               <img
-                src={URL.createObjectURL(values.selectedFile)}
+                // src={URL.createObjectURL(post?.selectedFile)}
                 alt="Selected Image"
                 className="selected-image"
               />
@@ -106,13 +136,13 @@ export default function PostForm() {
                   <div className="media-button-group">
                     <Button
                       className="media-button"
-                      onClick={() => handleAddMedia("picture")}
+                      // onClick={() => handleAddMedia("picture")}
                     >
                       p
                     </Button>
                     <Button
                       className="media-button"
-                      onClick={() => handleAddMedia("video")}
+                      // onClick={() => handleAddMedia("video")}
                     >
                       v
                     </Button>

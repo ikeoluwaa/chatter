@@ -1,13 +1,25 @@
-import { MenuItem } from "semantic-ui-react";
+import { Button, MenuItem } from "semantic-ui-react";
 import { FiAlignJustify } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
-// import SignedOutButtons from "./SignedOutButtons";
 import SignedInMenu from "./SignedInMenu";
-import { useState } from "react";
 import SignedOutButtons from "./SignedOutButtons";
+import { NavLink } from "react-router-dom";
+import { useAppSelector } from "../../app/store/store";
+import { sampleData } from "../../app/api/sampleData";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../app/config/firebase";
 
 export default function NavBar() {
-const [auth,setAuth]=useState(false)
+  const { authenticated } = useAppSelector((state) => state.auth);
+
+  function seedData() {
+    sampleData.forEach(async (post) => {
+      const { id, ...rest } = post;
+      await setDoc(doc(db, "posts", id), {
+        ...rest,
+      });
+    });
+  }
 
   return (
     <div className="nav-container">
@@ -20,9 +32,20 @@ const [auth,setAuth]=useState(false)
           <MenuItem>About us</MenuItem>
           <MenuItem>Contact</MenuItem>
           <MenuItem>Blogs</MenuItem>
+          <MenuItem name="/Scatch" as={NavLink} to="scatch" />
         </div>
       </nav>
-   {auth ? <SignedInMenu setAuth={setAuth}/> : <SignedOutButtons setAuth={setAuth}/>}
+      {import.meta.env.DEV && (
+        <MenuItem>
+          <Button
+            inverted={true}
+            color="teal"
+            content="seed data"
+            onClick={seedData}
+          />
+        </MenuItem>
+      )}
+      {authenticated ? <SignedInMenu /> : <SignedOutButtons />}
 
       <button className="mobile-nav ">
         <FiAlignJustify className="icon-mobile-nav menu" />

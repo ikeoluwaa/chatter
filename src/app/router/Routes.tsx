@@ -4,24 +4,30 @@ import FeedsDashboard from "../../components/feeds/FeedsDashboatd";
 import PostForm from "../../components/feeds/PostForm.";
 
 import PostDetailedPage from "../../components/feeds/details/PostDetailedPage";
+import Scatch from "../../features/scratch/Scatch";
+import AccountPage from "../../features/auth/AccountPage";
 
-export const router =createBrowserRouter([
- {
-  
-  path:'/',
-  element:<App/>,
-  children:[
-    {
-      path:'/feeds',element:<FeedsDashboard/>
-    },
-    {
-      path:'/CreatePost',element:<PostForm key='create'/>
-    },
-    {
-      path:'/posts/:id',element:<PostDetailedPage/>
-    },
-    
-  ]
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/feeds",
+        element: <FeedsDashboard />,
+      },
+      {
+        path: "/CreatePost",
+        element: <PostForm key="create" />,
+      },
+      {
+        path: "/posts/:id",
+        element: <PostDetailedPage />,
+      },
+      { path: "/Scatch", element: <Scatch /> },
 
-}
-])
+      { path: "/manage/:id", element: <PostForm /> },
+      { path: "/account", element: <AccountPage /> },
+    ],
+  },
+]);
