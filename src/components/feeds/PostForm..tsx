@@ -10,7 +10,7 @@ import { actions } from "./feedSlice";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function PostForm() {
-  const { loadDocument, create, edit } = useFireStore("posts");
+  const { loadDocument, create, update } = useFireStore("posts");
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ export default function PostForm() {
 
   async function editPost(data: AppFeed) {
     if (!post) return;
-    await edit(data.id, { ...data });
+    await update(data.id, { ...data });
   }
 
   async function createPost(data: FieldValues) {

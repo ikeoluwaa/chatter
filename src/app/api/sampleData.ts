@@ -18,6 +18,7 @@ export const sampleData = [
   },
   {
     id: "2",
+    PhotoURL: "",
     author: "Oluwatobi Ogunniyi",
     occupation: "Software developer",
     date: Timestamp.fromDate(new Date(Date.now() + 30 * 8640000)),
@@ -33,6 +34,7 @@ export const sampleData = [
 
   {
     id: "3",
+    PhotoURL: "",
     author: "Adebobola Muhydeen",
     occupation: "Political analyst",
     date: Timestamp.fromDate(new Date(Date.now() + 65 * 8640000)),

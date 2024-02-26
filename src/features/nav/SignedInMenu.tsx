@@ -31,7 +31,12 @@ export default function SignedInMenu() {
             as={Link}
             to="/account"
           />
-          <Dropdown.Item text="My profile" icon="settings" />
+          <Dropdown.Item
+            as={Link}
+            to={`/profiles/${currentUser?.uid}`}
+            text="My profile"
+            icon="settings"
+          />
           <Dropdown.Item onClick={handleSignOut} text="Sign out" icon="power" />
         </Dropdown.Menu>
       </Dropdown>

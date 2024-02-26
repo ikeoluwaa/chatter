@@ -31,7 +31,7 @@ export default function RegisterForm() {
         displayName: data.displayName,
       });
       await set(userCreds.user.uid, {
-        diplayName: data.displayName,
+        displayName: data.displayName,
         email: data.email,
         createdAt: Timestamp.now(),
       });
@@ -52,7 +52,7 @@ export default function RegisterForm() {
           defaultValue=""
           placeholder="Display Name"
           {...register("displayName", { required: true })}
-          error={errors.diplayName && "Display name is required"}
+          error={errors.displayName && "Display name is required"}
         />
 
         <Form.Input

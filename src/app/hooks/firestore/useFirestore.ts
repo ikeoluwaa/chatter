@@ -100,7 +100,7 @@ export const useFireStore = <T extends DocumentData>(path: string) => {
     }
   };
 
-  const edit = async (id: string, data: T) => {
+  const update = async (id: string, data: T) => {
     const docRef = doc(db, path, id);
     try {
       return await updateDoc(docRef, data);
@@ -128,5 +128,5 @@ export const useFireStore = <T extends DocumentData>(path: string) => {
     }
   };
 
-  return { loadCollection, loadDocument, create, edit, remove, set };
+  return { loadCollection, loadDocument, create, update, remove, set };
 };

@@ -32,7 +32,7 @@ function App() {
         <HomePage />
       ) : (
         <>
-          <div className="flex gap-16">
+          <div className="">
             <ModalManager />
             <SideNav />
             <Outlet />

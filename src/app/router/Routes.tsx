@@ -6,6 +6,7 @@ import PostForm from "../../components/feeds/PostForm.";
 import PostDetailedPage from "../../components/feeds/details/PostDetailedPage";
 import Scatch from "../../features/scratch/Scatch";
 import AccountPage from "../../features/auth/AccountPage";
+import ProfilePage from "../../features/profiles/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       },
       { path: "/Scatch", element: <Scatch /> },
 
+      { path: "/profiles/:id", element: <ProfilePage /> },
       { path: "/manage/:id", element: <PostForm /> },
       { path: "/account", element: <AccountPage /> },
     ],
