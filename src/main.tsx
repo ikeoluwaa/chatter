@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./app/layout/index.css";
+import "./app/layout/queries.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./app/router/Routes.tsx";
 import { Provider } from "react-redux";

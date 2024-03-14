@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import SideNav from "../../features/nav/SideNav";
 import HomePage from "../../features/home/HomePage";
 import ModalManager from "../common/modals/ModalManager";
@@ -6,7 +6,9 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch } from "../store/store";
 import { auth } from "../config/firebase";
-import { logOut, signIn } from "../../features/auth/authSlice";
+import { logout, signIn } from "../../features/auth/authSlice";
+import FeedNav from "../../features/nav/FeedNav";
+import { Container, Grid, GridColumn } from "semantic-ui-react";
 
 function App() {
   const location = useLocation();
@@ -18,7 +20,7 @@ function App() {
         if (user) {
           dispatch(signIn(user));
         } else {
-          dispatch(logOut());
+          dispatch(logout());
         }
       },
       error: (error) => console.log(error),
@@ -32,11 +34,22 @@ function App() {
         <HomePage />
       ) : (
         <>
-          <div className="">
-            <ModalManager />
-            <SideNav />
-            <Outlet />
-          </div>
+          <Grid>
+            <GridColumn computer={3} tablet={3} mobile={2}>
+              <SideNav />
+            </GridColumn>
+            <GridColumn width={12} tablet={13} mobile={12}>
+              <div>
+                <FeedNav />
+              </div>
+
+              <ModalManager />
+              <ScrollRestoration />
+              <Container>
+                <Outlet />
+              </Container>
+            </GridColumn>
+          </Grid>
         </>
       )}
     </>

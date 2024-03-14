@@ -1,8 +1,8 @@
 import { Button, Grid, Header, Tab } from "semantic-ui-react";
-import { Profile } from "../../app/types/profile";
 import { useState } from "react";
 import ProfileForm from "./ProfileForm";
 import { auth } from "../../app/config/firebase";
+import { Profile } from "../../app/types/profile";
 
 type Props = {
   profile: Profile;
@@ -36,6 +36,11 @@ export default function ProfileAbout({ profile }: Props) {
           ) : (
             <>
               <div style={{ marginBottom: 10 }}>
+                <p>
+                  <strong>
+                    Name:{profile.firstName} {profile.lastName}
+                  </strong>
+                </p>
                 <strong>Member since:{profile.createdAt}</strong>
                 <div style={{ marginTop: 10 }}>{profile.description}</div>
               </div>

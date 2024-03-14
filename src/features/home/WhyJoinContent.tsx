@@ -1,6 +1,10 @@
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Icon, Image } from "semantic-ui-react";
+import { openModal } from "../../app/common/modals/modalSlice";
+import { useAppDispatch } from "../../app/store/store";
 
 export default function WhyJoinContent() {
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <main className="why-container">
@@ -58,7 +62,7 @@ export default function WhyJoinContent() {
       <div className="testimonia">
         <div className="testimonia-grid">
           <div>
-            <img src="" alt="" />
+            <Image src="join.jpg" alt="" size="medium" circular />
           </div>
           <div style={{ padding: "3.8rem" }}>
             <p style={{ fontSize: "1.4rem", marginBottom: "3rem" }}>
@@ -68,7 +72,17 @@ export default function WhyJoinContent() {
               their ideas and engaging in thoughtful discussions.”
             </p>
             <p>Adebobola Muhydeen, Software developer at Apple</p>
-            <Button content="Join chatter" floated="left" />
+            <Button
+              onClick={() => dispatch(openModal({ type: "SignupForm" }))}
+              style={{
+                marginTop: "1rem",
+                backgroundColor: "#543EE0",
+                color: "white",
+                borderRadius: "0.5rem",
+              }}
+              content="Join chatter"
+              floated="left"
+            />
           </div>
         </div>
       </div>

@@ -21,6 +21,8 @@ export default function ProfileForm({ profile, setEditMode }: Props) {
     defaultValues: {
       displayName: profile.displayName,
       description: profile.description,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
     },
   });
 
@@ -40,6 +42,16 @@ export default function ProfileForm({ profile, setEditMode }: Props) {
         placeholder="Display Name"
         {...register("displayName", { required: true })}
         error={errors.displayName && "Display name is Required"}
+      />
+      <Form.Input
+        placeholder="First Name"
+        {...register("firstName", { required: true })}
+        error={errors.displayName && "First name is Required"}
+      />
+      <Form.Input
+        placeholder="Last Name"
+        {...register("lastName", { required: true })}
+        error={errors.displayName && "Last name is Required"}
       />
 
       <Form.TextArea

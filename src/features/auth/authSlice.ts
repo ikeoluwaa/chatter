@@ -5,10 +5,13 @@ import { User } from "firebase/auth";
 type State = {
   authenticated: boolean;
   currentUser: AppUser | null;
+  initialised: boolean;
 };
+
 const initialState: State = {
   authenticated: false,
   currentUser: null,
+  initialised: false,
 };
 
 export const authSlice = createSlice({
@@ -19,6 +22,7 @@ export const authSlice = createSlice({
       reducer: (state, action: PayloadAction<AppUser>) => {
         state.authenticated = true;
         state.currentUser = action.payload;
+        state.initialised = true;
       },
       prepare: (user: User) => {
         const mapped: AppUser = {
@@ -27,15 +31,19 @@ export const authSlice = createSlice({
           photoURL: user.photoURL,
           displayName: user.displayName,
           providerId: user.providerData[0].providerId,
+          firstName: null,
+          lastName: null,
+          role: null,
         };
         return { payload: mapped };
       },
     },
-    logOut: (state) => {
+    logout: (state) => {
       state.authenticated = false;
       state.currentUser = null;
+      state.initialised = true;
     },
   },
 });
 
-export const { signIn, logOut } = authSlice.actions;
+export const { signIn, logout } = authSlice.actions;

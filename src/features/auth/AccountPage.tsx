@@ -9,13 +9,14 @@ import {
   Segment,
 } from "semantic-ui-react";
 import { useAppSelector } from "../../app/store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react"; // Import useState
 import { updatePassword } from "firebase/auth";
 import { auth } from "../../app/config/firebase";
 import { toast } from "react-toastify";
 
 export default function AccountPage() {
   const { currentUser } = useAppSelector((state) => state.auth);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
   const {
     register,
@@ -44,7 +45,6 @@ export default function AccountPage() {
         toast.success("password updated successfully");
         reset();
       }
-      console.log(data);
     } catch (error: any) {
       setError("root.serverError", {
         type: "400",
@@ -58,17 +58,29 @@ export default function AccountPage() {
       <Header dividing size="large" content="Account" />
       {currentUser?.providerId === "password" && (
         <div>
-          <Header color="teal" sub content="change password" />
+          <Header
+            style={{
+              color: "#543EE0",
+            }}
+            sub
+            content="change password"
+          />
           <p>use this form to change your password</p>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <FormInput
-              type="password"
+              icon={{
+                name: passwordVisible ? "eye slash" : "eye",
+                link: true,
+                onClick: () => setPasswordVisible(!passwordVisible),
+              }}
+              type={passwordVisible ? "text" : "password"} // Use type text
               defaultValue=""
               placeholder="Password"
               {...register("password1", { required: true })}
               error={errors.password1 && "Password is required"}
             />
             <FormInput
+              icon="checkmark"
               type="password"
               defaultValue=""
               placeholder="Confirm Password"
@@ -97,6 +109,11 @@ export default function AccountPage() {
             )}
 
             <Button
+              style={{
+                backgroundColor: "#543EE0",
+                color: "white",
+                borderRadius: "0.5rem",
+              }}
               loading={isSubmitting}
               type="submit"
               disabled={!isValid || isSubmitting}

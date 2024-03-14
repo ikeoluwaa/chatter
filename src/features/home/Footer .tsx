@@ -1,4 +1,10 @@
+import { Button } from "semantic-ui-react";
+import { openModal } from "../../app/common/modals/modalSlice";
+import { useAppDispatch } from "../../app/store/store";
+
 export default function Footer() {
+  const dispatch = useAppDispatch();
+
   return (
     <footer>
       <div className="footer-main-grid">
@@ -11,7 +17,17 @@ export default function Footer() {
             Share people your great ideas, and also read write-ups based on your
             interests. connect with people of same interests and goals
           </p>
-          <button>Get started</button>
+          <Button
+            onClick={() => dispatch(openModal({ type: "SignupForm" }))}
+            style={{
+              marginTop: "1rem",
+              backgroundColor: "#543EE0",
+              color: "white",
+              borderRadius: "0.5rem",
+            }}
+          >
+            Get started
+          </Button>
         </div>
       </div>
       <div className="footer-nav">

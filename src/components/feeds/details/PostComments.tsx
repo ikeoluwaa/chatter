@@ -1,96 +1,143 @@
-
 import {
   CommentText,
   CommentMetadata,
-  CommentGroup,
   CommentContent,
   CommentAvatar,
   CommentActions,
   CommentAction,
   CommentAuthor,
-  FormTextArea,
-  Button,
   Comment,
-  Form,
   Header,
-} from 'semantic-ui-react'
+  Segment,
+  CommentGroup,
+} from "semantic-ui-react";
+import CommentForm from "./CommentForm";
+import { useEffect, useState } from "react";
+import { ChatComment } from "../../../app/types/feeds";
+import { onChildAdded, ref } from "firebase/database";
+import { fb } from "../../../app/config/firebase";
+import { Link } from "react-router-dom";
+import { formatDistance } from "date-fns";
 
+type Props = {
+  postId: string;
+};
 
+export default function PostComments({ postId }: Props) {
+  const [comments, setComments] = useState<ChatComment[]>([]);
+  const [replyForm, setReplyForm] = useState<any>({
+    open: false,
+    commentId: null,
+  });
 
+  useEffect(() => {
+    const commentRef = ref(fb, `comments/${postId}`);
+    const unsubscribe = onChildAdded(commentRef, (data) => {
+      const comment = { ...data.val(), id: data.key };
 
-export default function PostComments() {
+      setComments((prevState) => [...prevState, comment]);
+    });
+
+    return () => unsubscribe();
+  }, [postId]);
+  function createCommentTree(data: ChatComment[]) {
+    const table = Object.create(null);
+    data.forEach((item) => (table[item.id] = { ...item, childNodes: [] }));
+    const dataTree: ChatComment[] = [];
+    data.forEach((item) => {
+      if (item.parentId) table[item.parentId].childNodes.push(table[item.id]);
+      else dataTree.push(table[item.id]);
+    });
+    return dataTree;
+  }
+
   return (
     <>
-    <CommentGroup>
-    <Header as='h3' dividing>
-      Comments
-    </Header>
+      <Segment
+        textAlign="center"
+        attached="top"
+        inverted
+        style={{ border: "none", backgroundColor: "#543EE0" }}
+      >
+        <Header as="h3" dividing>
+          Comments
+        </Header>
+      </Segment>
+      <Segment attached style={{ height: 400, overflowY: "scroll" }}>
+        <CommentForm postId={postId} />
+        <CommentGroup style={{ paddingBottom: 0, marginBottom: 0 }}>
+          {createCommentTree(comments)
+            .reverse()
+            .map((comment) => (
+              <Comment key={comment.id}>
+                <CommentAvatar src={comment.photoURL || "/user.png"} />
+                <CommentContent>
+                  <CommentAuthor as={Link} to={`/profiles/${comment.uid}`}>
+                    {comment.displayName}
+                  </CommentAuthor>
+                  <CommentMetadata>
+                    <div>{formatDistance(comment.date, new Date())} ago</div>
+                  </CommentMetadata>
+                  <CommentText>{comment.text}</CommentText>
+                  <CommentActions>
+                    <CommentAction
+                      onClick={() =>
+                        setReplyForm({ open: true, commentId: comment.id })
+                      }
+                    >
+                      Reply
+                    </CommentAction>
+                    {replyForm.open && replyForm.commentId === comment.id && (
+                      <CommentForm
+                        key={comment.id}
+                        postId={postId}
+                        parentId={comment.id}
+                        setReplyForm={setReplyForm}
+                      />
+                    )}
+                  </CommentActions>
+                </CommentContent>
 
-    <Comment>
-      <CommentAvatar src='/images/avatar/small/matt.jpg' />
-      <CommentContent>
-        <CommentAuthor as='a'>Matt</CommentAuthor>
-        <CommentMetadata>
-          <div>Today at 5:42PM</div>
-        </CommentMetadata>
-        <CommentText>How artistic!</CommentText>
-        <CommentActions>
-          <CommentAction>Reply</CommentAction>
-        </CommentActions>
-      </CommentContent>
-    </Comment>
-
-    <Comment>
-      <CommentAvatar src='/images/avatar/small/elliot.jpg' />
-      <CommentContent>
-        <CommentAuthor as='a'>Elliot Fu</CommentAuthor>
-        <CommentMetadata>
-          <div>Yesterday at 12:30AM</div>
-        </CommentMetadata>
-        <CommentText>
-          <p>This has been very useful for my research. Thanks as well!</p>
-        </CommentText>
-        <CommentActions>
-          <CommentAction>Reply</CommentAction>
-        </CommentActions>
-      </CommentContent>
-      <CommentGroup>
-        <Comment>
-          <CommentAvatar src='/images/avatar/small/jenny.jpg' />
-          <CommentContent>
-            <CommentAuthor as='a'>Jenny Hess</CommentAuthor>
-            <CommentMetadata>
-              <div>Just now</div>
-            </CommentMetadata>
-            <CommentText>Elliot you are always so right :)</CommentText>
-            <CommentActions>
-              <CommentAction>Reply</CommentAction>
-            </CommentActions>
-          </CommentContent>
-        </Comment>
-      </CommentGroup>
-    </Comment>
-
-    <Comment>
-      <CommentAvatar src='/images/avatar/small/joe.jpg' />
-      <CommentContent>
-        <CommentAuthor as='a'>Joe Henderson</CommentAuthor>
-        <CommentMetadata>
-          <div>5 days ago</div>
-        </CommentMetadata>
-        <CommentText>Dude, this is awesome. Thanks so much</CommentText>
-        <CommentActions>
-          <CommentAction>Reply</CommentAction>
-        </CommentActions>
-      </CommentContent>
-    </Comment>
-
-    <Form reply>
-      <FormTextArea />
-      <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-    </Form>
-  </CommentGroup></>
-   
-  )
+                <CommentGroup style={{ paddingBottom: 0 }}>
+                  {comment.childNodes.map((child) => (
+                    <Comment key={child.id}>
+                      <CommentAvatar src={child.photoURL || "/user.png"} />
+                      <CommentContent>
+                        <CommentAuthor as={Link} to={`/profiles/${child.uid}`}>
+                          {child.displayName}
+                        </CommentAuthor>
+                        <CommentMetadata>
+                          <div>
+                            {formatDistance(child.date, new Date())} ago
+                          </div>
+                        </CommentMetadata>
+                        <CommentText>{child.text}</CommentText>
+                        <CommentActions>
+                          <CommentAction
+                            onClick={() =>
+                              setReplyForm({ open: true, commentId: child.id })
+                            }
+                          >
+                            Reply
+                          </CommentAction>
+                          {replyForm.open &&
+                            replyForm.commentId === child.id && (
+                              <CommentForm
+                                key={comment.id}
+                                postId={postId}
+                                parentId={child.id}
+                                setReplyForm={setReplyForm}
+                              />
+                            )}
+                        </CommentActions>
+                      </CommentContent>
+                    </Comment>
+                  ))}
+                </CommentGroup>
+              </Comment>
+            ))}
+        </CommentGroup>
+      </Segment>
+    </>
+  );
 }
-

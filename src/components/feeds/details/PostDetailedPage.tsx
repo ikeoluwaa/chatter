@@ -7,6 +7,8 @@ import { actions } from "../feedSlice";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Grid, GridRow } from "semantic-ui-react";
 import { useFireStore } from "../../../app/hooks/firestore/useFirestore";
+import PostDetailsHeader from "./PostDetailsHeader";
+import PostDetailsSummery from "./PostDetailsSummery";
 
 export default function PostDetailedPage() {
   const { id } = useParams();
@@ -29,10 +31,16 @@ export default function PostDetailedPage() {
     <>
       <Grid>
         <GridRow>
+          <PostDetailsHeader post={post} />
+        </GridRow>
+        <GridRow>
           <PostDetails post={post} />
         </GridRow>
         <GridRow>
-          <PostComments />
+          <PostDetailsSummery post={post} />
+        </GridRow>
+        <GridRow>
+          <PostComments postId={post.id} />
         </GridRow>
       </Grid>
     </>

@@ -11,7 +11,16 @@ export default function WelcomeContent() {
             Unleash the Power of Words, Connect with Like-minded Readers and
             Writers
           </p>
-          <Button as={Link} to="/feeds">
+          <Button
+            style={{
+              marginTop: "1rem",
+              backgroundColor: "#543EE0",
+              color: "white",
+              borderRadius: "0.5rem",
+            }}
+            as={Link}
+            to="/feeds"
+          >
             Get started
           </Button>
         </div>

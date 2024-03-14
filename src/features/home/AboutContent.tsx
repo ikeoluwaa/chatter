@@ -1,4 +1,3 @@
-
 export default function AboutContent() {
   return (
     <section className="about-page-container ">
@@ -15,7 +14,7 @@ export default function AboutContent() {
         </p>
       </div>
       <div>
-        <img src="aboutPage.jpg" alt="" className="aboutPage-img" />
+        <img src="about.jpg" alt="" className="aboutPage-img" />
       </div>
     </section>
   );

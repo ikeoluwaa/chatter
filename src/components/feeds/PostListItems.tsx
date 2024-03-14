@@ -1,46 +1,190 @@
-import { Button, Icon, Image } from "semantic-ui-react";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Divider,
+  Feed,
+  Header,
+  Icon,
+  Image,
+  Item,
+  ItemContent,
+  ItemGroup,
+} from "semantic-ui-react";
 import { AppFeed } from "../../app/types/feeds";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/store";
+import { useFireStore } from "../../app/hooks/firestore/useFirestore";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { format } from "date-fns";
+import { openModal } from "../../app/common/modals/modalSlice";
 
 type Props = {
   post: AppFeed;
 };
 
 export default function PostListItem({ post }: Props) {
+  const { currentUser } = useAppSelector((state) => state.auth);
+  const { update } = useFireStore("posts");
+  const [loading, setLoading] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const { authenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      currentUser &&
+      post.likes?.some((liker) => liker.id === currentUser.uid)
+    ) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [currentUser, post.likes]);
+
+  async function handleViews() {
+    if (!currentUser || !authenticated) {
+      return navigate("/unauthorised", { state: { from: location.pathname } });
+    }
+
+    try {
+      if (post.isUser) {
+        const user = post.views.find((x) => x.id === currentUser.uid);
+        await update(post.id, {
+          views: arrayRemove(user),
+          viewedByIds: arrayRemove(currentUser.uid),
+        });
+      } else {
+        navigate(`/posts/${post.id}`);
+        await update(post.id, {
+          views: arrayUnion({
+            id: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+          }),
+          userIds: arrayUnion(currentUser.uid),
+        });
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error handling views:", error);
+      setLoading(false);
+    }
+  }
+
+  async function handleLikes() {
+    if (!currentUser) {
+      setLiked(false); // Reset liked state
+      setLoading(false);
+      return navigate("/unauthorised", { state: { from: location.pathname } });
+    }
+
+    setLoading(true);
+    if (liked) {
+      await update(post.id, {
+        likes: arrayRemove({
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        }),
+        likerIds: arrayRemove(currentUser.uid),
+      });
+      setLiked(false);
+    } else {
+      await update(post.id, {
+        likes: arrayUnion({
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        }),
+        likerIds: arrayUnion(currentUser.uid),
+      });
+      setLiked(true);
+    }
+    setLoading(false);
+  }
+
   return (
-    <div className="feed-item">
-      <div className="author-info">
-        <Image
-          alt="Author Avatar"
-          src={post.PhotoURL || "/user.png"}
-          size="tiny"
+    <>
+      <Feed>
+        <ItemGroup>
+          <Item style={{ height: "" }}>
+            <ItemContent>
+              <Item.Header className="post-content-header">
+                <div className="author-info">
+                  <Image
+                    alt="Author Avatar"
+                    src={post.authorPhotoURL || "/user.png"}
+                    size="tiny"
+                    circular
+                    className="author-avatar"
+                  />
+                  <div>
+                    <Header
+                      as={Link}
+                      to={`/profiles/${post.id}`}
+                      style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}
+                    >
+                      {post.author}
+                    </Header>
+                    <Header.Subheader style={{ color: "#495057" }}>
+                      {post.occupation}
+                      {post.date &&
+                        typeof post.date === "string" &&
+                        format(new Date(post.date), "dd MMM yyyy HH:mm")}
+                    </Header.Subheader>
+                  </div>
+                </div>
+              </Item.Header>
+              <ItemContent className="post-title">{post.title}</ItemContent>
+              <p>{post.content}</p>
+              {post.postPhotoURL && (
+                <Image size="big" src={post.postPhotoURL} alt="Post Image" />
+              )}
+              {post.postVideoURL && (
+                <video controls>
+                  <source src={post.postVideoURL} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </ItemContent>
+          </Item>
+        </ItemGroup>
+        <div className="statistics">
+          <Feed.Meta
+            onClick={() => dispatch(openModal({ type: "PostFeedComment" }))}
+          >
+            <Icon name="comment" />
+            {post.comments && post.comments.length}
+          </Feed.Meta>
+          <Feed.Meta onClick={handleLikes} style={{ color: "pink" }}>
+            <Feed.Like style={{ color: "black", cursor: "pointer" }}>
+              <Icon name="like" color={liked ? "red" : undefined} />
+              {post.likes?.length}
+            </Feed.Like>
+          </Feed.Meta>
+          <Feed.Meta>
+            <Feed>
+              <Icon name="save" />
+              {post.views && post.views.length} Views
+            </Feed>
+          </Feed.Meta>
+        </div>
+        <Button
+          style={{
+            marginTop: "1rem",
+            backgroundColor: "#543EE0",
+            color: "white",
+            borderRadius: "0.5rem",
+          }}
+          onClick={handleViews}
+          loading={loading}
+          content="View Post"
         />
-        <div className="author-details">
-          <p>{post.author}</p>
-          <p>{post.occupation}</p>
-          <span>{post.date}</span>
-        </div>
-      </div>
-      <div className="content">
-        <h2>{post.title}</h2>
-        <p>{post.content}</p>
-        <div className="post-image">
-          <img src={post.PhotoURL} alt="Post Image" />
-        </div>
-      </div>
-      <div className="statistics">
-        <Button icon>
-          <Icon name="comment" />
-        </Button>
-        <span>Likes: {post.likes}</span>
-        <span>Views: {post.views}</span>
-      </div>
-      <Button
-        content="View Post"
-        as={Link}
-        to={`/posts/${post.id}`}
-        style={{ marginTop: "1rem" }}
-      />
-    </div>
+      </Feed>
+      <Divider />
+    </>
   );
 }

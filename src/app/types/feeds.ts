@@ -1,12 +1,40 @@
 export type AppFeed = {
   id: string;
-  PhotoURL: string;
+  authorPhotoURL: string;
   author: string;
   occupation: string;
   date: string;
   title: string;
   content: string;
-  views: number;
-  likes: number;
-  selectedFile: string;
+  authorUid: string;
+  postPhotoURL: string;
+  postVideoURL?: string;
+  views: View[];
+  likes: Like[];
+  viewedByIds: string[];
+  likedByIds: string[];
+  isAuthor?: boolean;
+  isUser?: boolean;
+  comments: ChatComment[];
+};
+
+export type View = {
+  id: string;
+  displayName: string;
+  photoURL: string;
+};
+export type Like = {
+  id: string;
+  displayName: string;
+  photoURL: string;
+};
+export type ChatComment = {
+  id: string;
+  displayName: string;
+  photoURL: string;
+  uid: string;
+  text: string;
+  date: number;
+  parentId: string | null;
+  childNodes: ChatComment[];
 };

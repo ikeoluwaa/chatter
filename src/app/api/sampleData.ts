@@ -4,6 +4,7 @@ export const sampleData = [
   {
     id: "1",
     PhotoURL: "",
+
     author: "Grace Ikpang",
     occupation: "Product designer",
     date: Timestamp.fromDate(new Date(Date.now() + 60 * 8640000)),
@@ -14,7 +15,7 @@ export const sampleData = [
     likes: 200,
     comments: 120,
     views: 2980,
-    selectedFile: "",
+    selectedFile: "https://randomuser.me/api/portraits/men/20.jpg",
   },
   {
     id: "2",
@@ -29,7 +30,7 @@ export const sampleData = [
     likes: 200,
     comments: 120,
     views: 2980,
-    selectedFile: "",
+    selectedFile: "https://randomuser.me/api/portraits/men/20.jpg",
   },
 
   {

@@ -9,6 +9,7 @@ import { actions } from "./photoSlice";
 import { updateProfile } from "firebase/auth";
 import { deleteObject, ref } from "firebase/storage";
 import { toast } from "react-toastify";
+import { batchSetPhoto } from "../../app/actions/fireStoreActions";
 
 type Props = {
   profile: Profile;
@@ -21,16 +22,13 @@ export default function ProfilePhotos({ profile }: Props) {
   const { loadCollection, remove } = useFireStore(
     `profiles/${profile.id}/photos`
   );
-  const { update } = useFireStore("profiles");
 
   useEffect(() => {
     loadCollection(actions);
   }, [loadCollection]);
 
   async function handleSetMain(photo: Photo) {
-    await update(profile.id, {
-      photoURL: photo.url,
-    });
+    await batchSetPhoto(photo.url);
     await updateProfile(auth.currentUser!, {
       photoURL: photo.url,
     });
