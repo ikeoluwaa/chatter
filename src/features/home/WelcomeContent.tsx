@@ -4,7 +4,17 @@ import { Button } from "semantic-ui-react";
 export default function WelcomeContent() {
   return (
     <section className="home-page-container">
-      <div className="header-container">
+      <div
+        className="header-container"
+        // style={{
+        //   backgroundImage: 'url("/homeScreen.jpg")',
+        //   // Optionally, you can specify other background properties like size, position, etc.
+        //   backgroundSize: "cover",
+        //   backgroundPosition: "center",
+        //   // You can also specify fallback background color in case the image fails to load
+        //   backgroundColor: "#f0f0f0",
+        // }}
+      >
         <div className="header-inner">
           <h1>Welcome to Chatter: A Haven for Text-Based Content</h1>
           <p>

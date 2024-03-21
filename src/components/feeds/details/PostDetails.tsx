@@ -184,7 +184,7 @@ export default function PostDetails({ post }: Props) {
                   </div>
                 </Item.Header>
                 <ItemContent className="post-title">{post.title}</ItemContent>
-                <p>{post.content}</p>
+                <p className="post-content">{post.content}</p>
                 {post.postPhotoURL && (
                   <Image src={post.postPhotoURL} alt="Post Image" />
                 )}

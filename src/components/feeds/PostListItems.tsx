@@ -161,7 +161,9 @@ export default function PostListItem({ post }: Props) {
                 </div>
               </Item.Header>
               <ItemContent className="post-title">{post.title}</ItemContent>
-              <p>{post.content}</p>
+              <p className="post-content" style={{ fontSize: "1.4rem" }}>
+                {post.content}
+              </p>
               <div
                 style={{
                   display: "flex",

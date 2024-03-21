@@ -8,7 +8,7 @@
 }
 @media (max-width: 75em) {
   html {
-    font-size: 56.9%;
+    font-size: 60%;
   }
   .home-page-container {
     max-width: 100vw;
@@ -218,7 +218,7 @@
     height: 3rem !important;
   }
   .header.post-title {
-    font-size: 12px !important;
+    font-size: 1rem !important;
   }
 
   .item.post-content-header {
@@ -312,13 +312,16 @@
     height: 3rem !important;
   }
   .post-title {
-    font-size: 0.2rem;
+    font-size: 2rem;
+  }
+  .post-content {
+    font-size: 1.6 !important;
   }
   .sub.header {
-    font-size: 0.6rem !important;
+    font-size: 1.6rem !important;
   }
   .ui.header {
-    font-size: 0.4 !important;
+    font-size: 1 !important;
   }
   .login {
     font-size: 1rem !important;
