@@ -29,22 +29,36 @@ export default function NavBar() {
           CHATTER
         </h1>
       </header>
-
       <div className="nav-links">
-        <NavLink to="#home" onClick={() => scrollToSection("home")}>
+        <NavLink
+          to="#home"
+          id="home-link"
+          onClick={() => scrollToSection("home")}
+        >
           Home
         </NavLink>
-        <NavLink to="#about" onClick={() => scrollToSection("about")}>
+        <NavLink
+          to="#about"
+          id="about-link"
+          onClick={() => scrollToSection("about")}
+        >
           About us
         </NavLink>
-        <NavLink to="#contact" onClick={() => scrollToSection("contact")}>
+        <NavLink
+          to="#contact"
+          id="contact-link"
+          onClick={() => scrollToSection("contact")}
+        >
           Contact
         </NavLink>
-        <NavLink to="#blogs" onClick={() => scrollToSection("blogs")}>
+        <NavLink
+          to="#blogs"
+          id="blogs-link"
+          onClick={() => scrollToSection("blogs")}
+        >
           Blogs
         </NavLink>
       </div>
-
       {authenticated ? (
         <SignedInMenu />
       ) : (
@@ -69,10 +83,10 @@ export default function NavBar() {
           />
         </div>
       )}
-
       <button
         className="mobile-nav"
         onClick={toggleMenu}
+        aria-label="Toggle mobile navigation"
         style={{
           transition: "transform 0.3s ease",
           transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)",
@@ -80,7 +94,8 @@ export default function NavBar() {
       >
         {menuOpen ? <Icon name="close" /> : <Icon name="bars" />}
       </button>
-      <MobileNavMenu isOpen={menuOpen} />
+      <MobileNavMenu isOpen={menuOpen} aria-label="Mobile navigation menu" />{" "}
+      {/* Updated ARIA label */}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import "@testing-library/jest-dom/extend-expect";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Button,

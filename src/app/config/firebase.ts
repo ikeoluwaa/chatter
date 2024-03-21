@@ -9,7 +9,7 @@ import { getStorage } from "firebase/storage";
 import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: "AIzaSyDQnEpm9BWSkPbG-8rB6ufthH1AYT-S82E",
   authDomain: "chatter-fb3bd.firebaseapp.com",
   projectId: "chatter-fb3bd",
   databaseURL: "https://chatter-fb3bd-default-rtdb.firebaseio.com",

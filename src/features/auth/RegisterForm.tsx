@@ -23,7 +23,6 @@ import { useFireStore } from "../../app/hooks/firestore/useFirestore";
 import { signIn } from "./authSlice";
 import { Timestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import ModalManager from "../../app/common/modals/ModalManager";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -147,15 +146,18 @@ export default function RegisterForm() {
                   label="First name"
                   placeholder="First Name"
                   {...register("firstName", { required: true })}
-                  error={errors.displayName && "First name is required"}
+                  error={errors.firstName && "First name is required"}
+                  id="first-name-input"
                 />
+
                 <Form.Input
                   fluid
                   defaultValue=""
                   label="Last name"
                   placeholder="Last Name"
                   {...register("lastName", { required: true })}
-                  error={errors.displayName && "Last name is required"}
+                  error={errors.lastName && "Last name is required"}
+                  id="last-name-input"
                 />
               </FormGroup>
               <Form.Input

@@ -3,7 +3,7 @@ import { Input } from "semantic-ui-react";
 import debounce from "lodash/debounce";
 
 export default function Search() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [, setSearchTerm] = useState("");
 
   const handleSearch = debounce((searchTerm) => {
     // Your search logic here

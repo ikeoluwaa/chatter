@@ -17,7 +17,7 @@ import CommentForm from "./CommentForm";
 import { formatDistance } from "date-fns";
 import { Link } from "react-router-dom";
 import { ChatComment } from "../../../app/types/feeds";
-import { get, onChildAdded, ref, remove } from "firebase/database";
+import { get, ref, remove } from "firebase/database";
 import { fb } from "../../../app/config/firebase";
 import { auth } from "../../../app/config/firebase";
 import { useCommentCount } from "../../../app/hooks/customhooks/useCommentCount ";

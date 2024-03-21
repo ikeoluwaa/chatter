@@ -56,3 +56,4 @@ export const profileSlice = createGenericSlice({
 });
 
 export const actions = profileSlice.actions;
+export default profileSlice.reducer;
