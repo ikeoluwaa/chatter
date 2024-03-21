@@ -68,6 +68,7 @@ export default function SideNavSliding() {
       >
         <div style={{ flex: 1, padding: "1rem", overflowY: "auto" }}>
           <Menu style={{ border: "none" }} fluid vertical>
+            <Menu.Item></Menu.Item>
             <Menu.Item>
               <Header
                 as={Link}
@@ -83,7 +84,58 @@ export default function SideNavSliding() {
             </Menu.Item>
             <Menu.Item>
               <Header>Overview</Header>
-              <Menu.Menu>{/* Menu items for overview */}</Menu.Menu>
+              <Menu.Menu>
+                <Menu.Item
+                  name="Feed"
+                  active={activeItem === "Feed"}
+                  onClick={() => handleItemClick("Feed")}
+                  as={Link}
+                  to="/feeds"
+                >
+                  <Icon name="feed" />
+                  Feed
+                </Menu.Item>
+                <Menu.Item
+                  name="Bookmarks"
+                  active={activeItem === "Bookmarks"}
+                  onClick={() => handleItemClick("Bookmarks")}
+                  as={Link}
+                  to="/bookmarks"
+                >
+                  <Icon name="bookmark" />
+                  Bookmarks
+                </Menu.Item>
+                <Menu.Item
+                  name="Team Blogs"
+                  active={activeItem === "Team Blogs"}
+                  onClick={() => handleItemClick("Team Blogs")}
+                  as={Link}
+                  to="/team-blogs"
+                >
+                  <Icon name="users" />
+                  Team Blogs
+                </Menu.Item>
+                <Menu.Item
+                  name="Drafts"
+                  active={activeItem === "Drafts"}
+                  onClick={() => handleItemClick("Drafts")}
+                  as={Link}
+                  to="/drafts"
+                >
+                  <Icon name="envelope open" />
+                  Drafts
+                </Menu.Item>
+                <Menu.Item
+                  name="Analytics"
+                  active={activeItem === "Analytics"}
+                  onClick={() => handleItemClick("Analytics")}
+                  as={Link}
+                  to="/analytics"
+                >
+                  <Icon name="chart bar" />
+                  Analytics
+                </Menu.Item>
+              </Menu.Menu>
             </Menu.Item>
             <Menu.Item>
               <Header style={{ alignSelf: "center" }}>Personal</Header>

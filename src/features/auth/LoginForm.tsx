@@ -74,6 +74,7 @@ export default function LoginForm() {
               flexDirection: "column",
               alignItems: "center",
               margin: "auto 0",
+              marginTop: "10rem",
             }}
           >
             <h1

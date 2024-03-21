@@ -120,6 +120,11 @@ export default function PostListItem({ post }: Props) {
   }
 
   async function handleComment() {
+    if (!currentUser) {
+      setLiked(false);
+      setLoading(false);
+      return navigate("/unauthorised", { state: { from: location.pathname } });
+    }
     setShowComments(!showComments);
     setModalOpen(true);
   }

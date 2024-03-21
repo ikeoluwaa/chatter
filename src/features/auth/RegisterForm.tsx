@@ -113,6 +113,7 @@ export default function RegisterForm() {
                 flexDirection: "column",
                 alignItems: "center",
                 marginLeft: "2rem",
+                marginTop: "15rem",
               }}
             >
               <h1

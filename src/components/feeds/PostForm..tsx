@@ -372,7 +372,7 @@ export default function PostForm() {
                 style={{
                   height: "",
                   border: "none",
-                  fontSize: "2rem",
+                  fontSize: "1rem",
                   resize: "vertical",
                   overflowY: "auto",
                 }}
