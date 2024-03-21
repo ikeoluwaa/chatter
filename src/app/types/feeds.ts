@@ -11,8 +11,10 @@ export type AppFeed = {
   postVideoURL?: string;
   views: View[];
   likes: Like[];
-  viewedByIds: string[];
+  bookmarks: Bookmarks[];
   likedByIds: string[];
+  bookmarkedIds: string[];
+  viewedByIds: string[];
   isAuthor?: boolean;
   isUser?: boolean;
   comments: ChatComment[];
@@ -24,6 +26,11 @@ export type View = {
   photoURL: string;
 };
 export type Like = {
+  id: string;
+  displayName: string;
+  photoURL: string;
+};
+export type Bookmarks = {
   id: string;
   displayName: string;
   photoURL: string;

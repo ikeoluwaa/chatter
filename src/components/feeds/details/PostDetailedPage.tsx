@@ -36,10 +36,12 @@ export default function PostDetailedPage() {
         <GridRow>
           <PostDetails post={post} />
         </GridRow>
-        <GridRow>
-          <PostDetailsSummery post={post} />
-        </GridRow>
-        <GridRow>
+        {post.isAuthor && (
+          <GridRow>
+            <PostDetailsSummery post={post} />
+          </GridRow>
+        )}
+        <GridRow id="comments">
           <PostComments postId={post.id} />
         </GridRow>
       </Grid>

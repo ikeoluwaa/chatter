@@ -13,7 +13,7 @@ export type QueryOptions = {
   attribute: string;
   operator: WhereFilterOp;
   value: string | number | boolean | Date | any[];
-  orderBy?: string;
+  orderBy?: SortOptions;
 };
 
 export type SortOptions = {

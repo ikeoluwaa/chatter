@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { AppFeed } from "../../../app/types/feeds";
 import { useAppDispatch, useAppSelector } from "../../../app/store/store";
 import { openModal } from "../../../app/common/modals/modalSlice";
+import { useCommentCount } from "../../../app/hooks/customhooks/useCommentCount ";
 
 type Props = {
   post: AppFeed;
@@ -29,8 +30,16 @@ export default function PostDetails({ post }: Props) {
   const { update } = useFireStore("posts");
   const [, setLoading] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false); // State for bookmarked status
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const scrollToSection = (id: any) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const handleDelete = async (postId: string) => {
     await remove(postId);
@@ -48,11 +57,52 @@ export default function PostDetails({ post }: Props) {
     } else {
       setLiked(false);
     }
-  }, [currentUser, post.likes]);
+    if (
+      currentUser &&
+      post.bookmarks?.some((bookmark) => bookmark.id === currentUser.uid)
+    ) {
+      setBookmarked(true);
+    } else {
+      setBookmarked(false);
+    }
+  }, [currentUser, post.likes, post.bookmarks]);
+
+  const commentCount = useCommentCount(post.id);
+
+  async function handleBookmark() {
+    if (!currentUser) {
+      setLoading(false);
+      return navigate("/unauthorised", { state: { from: location.pathname } });
+    }
+
+    setLoading(true);
+    if (bookmarked) {
+      await update(post.id, {
+        bookmarks: arrayRemove({
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        }),
+        bookmarkedIds: arrayRemove(currentUser.uid),
+      });
+      setBookmarked(false); // Toggle bookmarked state
+    } else {
+      await update(post.id, {
+        bookmarks: arrayUnion({
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        }),
+        bookmarkedIds: arrayUnion(currentUser.uid),
+      });
+      setBookmarked(true); // Toggle bookmarked state
+    }
+    setLoading(false);
+  }
 
   async function handleLikes() {
     if (!currentUser) {
-      setLiked(false); // Reset liked state
+      setLiked(false);
       setLoading(false);
       return navigate("/unauthorised", { state: { from: location.pathname } });
     }
@@ -84,9 +134,25 @@ export default function PostDetails({ post }: Props) {
 
   return (
     <>
-      <Segment attached style={{ border: "none", width: "70%" }}>
+      <Segment attached style={{ border: "none" }}>
         <Feed>
           <ItemGroup>
+            <Button
+              size="medium"
+              floated="right"
+              style={{ border: "none", backgroundColor: "transparent" }}
+              onClick={handleBookmark}
+            >
+              <Icon
+                size="big"
+                name="bookmark"
+                floated="right"
+                style={{
+                  color: bookmarked ? "#543EE0" : "rgba(0, 0, 0, 0.87)",
+                }}
+              />
+            </Button>
+
             <Item>
               <ItemContent>
                 <Item.Header className="post-content-header">
@@ -97,11 +163,13 @@ export default function PostDetails({ post }: Props) {
                       size="tiny"
                       circular
                       className="author-avatar"
+                      as={Link}
+                      to={`/profiles/${post.authorUid}`}
                     />
                     <div>
                       <Header
                         as={Link}
-                        to={`/profiles/${post.id}`}
+                        to={`/profiles/${post.authorUid}`}
                         style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}
                       >
                         {post.author}
@@ -133,8 +201,11 @@ export default function PostDetails({ post }: Props) {
             <Feed.Meta
               onClick={() => dispatch(openModal({ type: "PostFeedComment" }))}
             >
-              <Icon name="comment" />
-              {post.comments && post.comments.length}
+              <Icon
+                name="comment"
+                onClick={() => scrollToSection("comments")}
+              />
+              {commentCount}
             </Feed.Meta>
             <Feed.Meta onClick={handleLikes} style={{ color: "pink" }}>
               <Feed.Like style={{ color: "black", cursor: "pointer" }}>

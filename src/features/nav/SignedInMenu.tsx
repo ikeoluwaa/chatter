@@ -14,7 +14,7 @@ export default function SignedInMenu() {
   }
 
   return (
-    <Menu.Item position="right">
+    <Menu.Item className="signed-in-menu" position="right">
       <Image avatar spaced="right" src={currentUser?.photoURL || "/user.png"} />
       <Dropdown pointing="top right" text={currentUser?.displayName as string}>
         <Dropdown.Menu>

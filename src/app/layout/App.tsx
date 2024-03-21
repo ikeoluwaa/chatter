@@ -1,4 +1,9 @@
-import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  ScrollRestoration,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import SideNav from "../../features/nav/SideNav";
 import HomePage from "../../features/home/HomePage";
 import ModalManager from "../common/modals/ModalManager";
@@ -9,10 +14,19 @@ import { auth } from "../config/firebase";
 import { logout, signIn } from "../../features/auth/authSlice";
 import FeedNav from "../../features/nav/FeedNav";
 import { Container, Grid, GridColumn } from "semantic-ui-react";
+import MobileAppNav from "../../features/nav/MobileAppNav";
+import { actions } from "../../features/profiles/profileSlice";
+import { useFireStore } from "../hooks/firestore/useFirestore";
 
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { loadDocument } = useFireStore("profiles");
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) loadDocument(id, actions);
+  }, [id, loadDocument]);
 
   useEffect(() => {
     onAuthStateChanged(auth, {
@@ -35,21 +49,27 @@ function App() {
       ) : (
         <>
           <Grid>
-            <GridColumn computer={3} tablet={3} mobile={2}>
+            <GridColumn
+              className="app-side-bar"
+              computer={3}
+              tablet={3}
+              mobile={1}
+            >
+              <div></div>
               <SideNav />
             </GridColumn>
-            <GridColumn width={12} tablet={13} mobile={12}>
+            <GridColumn computer={13} tablet={13} mobile={16}>
               <div>
                 <FeedNav />
               </div>
-
-              <ModalManager />
               <ScrollRestoration />
               <Container>
                 <Outlet />
+                <ModalManager />
               </Container>
             </GridColumn>
           </Grid>
+          <MobileAppNav />
         </>
       )}
     </>

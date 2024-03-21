@@ -2,17 +2,29 @@ import { useAppSelector } from "../../app/store/store";
 import SignedInMenu from "./SignedInMenu";
 import SignedOutButtons from "./SignedOutButtons";
 import Search from "../search/Search";
+import SideNavSliding from "./SideNavSliding";
 
 export default function FeedNav() {
   const { authenticated } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
+    <div
+      className="feed-nav"
+      style={{
+        display: "flex ",
+        alignItems: "center",
+        justifyContent: "space-around",
+        marginBottom: "2rem",
+      }}
+    >
+      <div className="app-sliding-nav">
+        <SideNavSliding />
+      </div>
+      <div style={{ alignSelf: "" }}>
         <Search />
       </div>
 
-      <div>
+      <div className="feed-nav-buttons">
         {authenticated ? (
           <SignedInMenu />
         ) : (

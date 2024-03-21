@@ -29,7 +29,7 @@ export default function FeedFilters({
     handleSetFilter(activeIndex);
   };
 
-  function handleSetFilter(activeIndex: number) {
+  const handleSetFilter = (activeIndex: number) => {
     let q: QueryOptions[];
     let sort: SortOptions | undefined;
     switch (activeIndex) {
@@ -74,8 +74,8 @@ export default function FeedFilters({
         sort = { attribute: "date", order: "asc" };
         break;
     }
-    setQuery(q, sort); // Pass sort options to setQuery
-  }
+    setQuery(q, sort); // Pass sort options to the parent component
+  };
 
   const panes = [
     { menuItem: "For you" },
@@ -84,7 +84,7 @@ export default function FeedFilters({
   ];
 
   return (
-    <Grid>
+    <Grid style={{ margin: "0", padding: "0" }}>
       <Grid.Column computer={14} tablet={12} mobile={16}>
         <div className="flex items-center justify-between">
           <div>

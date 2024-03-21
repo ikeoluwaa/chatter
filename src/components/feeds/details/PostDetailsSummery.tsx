@@ -1,18 +1,16 @@
-// PostDetailsSummary.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Button,
   Divider,
-  Grid,
   Header,
-  Icon,
   Segment,
   Transition,
 } from "semantic-ui-react";
 import { AppFeed } from "../../../app/types/feeds";
-import PostViewList from "../PostViewList";
-import PostLikeList from "./PostLikeList";
 import { format } from "date-fns";
+import PostLikeListModal from "../../../app/common/modals/PostLikeListModal";
+import PostViewListModal from "../../../app/common/modals/PostViewListModal";
+import PostBookmarkListModal from "../../../app/common/modals/PostBookmarkListModal";
 
 type Props = {
   post: AppFeed;
@@ -21,23 +19,21 @@ type Props = {
 export default function PostDetailsSummary({ post }: Props) {
   const [likeListVisible, setLikeListVisible] = useState(false);
   const [viewListVisible, setViewListVisible] = useState(false);
+  const [bookmarksVisible, setBookmarksVisible] = useState(false);
   const [clickedDate, setClickedDate] = useState(new Date());
-  const [liked, setLiked] = useState(false);
-
-  useEffect(() => {
-    if (liked) {
-      setTimeout(() => setLiked(false), 2000);
-    }
-  }, [liked]);
 
   const toggleLikeListVisibility = () => {
     setLikeListVisible((prevVisible) => !prevVisible);
-    setLiked(true);
     setClickedDate(new Date());
   };
 
   const toggleViewListVisibility = () => {
     setViewListVisible((prevVisible) => !prevVisible);
+    setClickedDate(new Date());
+  };
+
+  const toggleBookmarksVisibility = () => {
+    setBookmarksVisible((prevVisible) => !prevVisible);
     setClickedDate(new Date());
   };
 
@@ -51,75 +47,124 @@ export default function PostDetailsSummary({ post }: Props) {
 
         <Divider style={{ border: "2px solid #543EE0" }} />
 
-        <Grid>
-          <Grid.Column width={16}>
+        <div>
+          <div>
             <Header>
-              <p>
-                <Icon
-                  name="like"
-                  style={{
-                    color: "#543EE0",
-                  }}
-                />
-                {post.likes?.length}{" "}
-                {post.likes?.length === 0 || post.likes?.length === 1
-                  ? "like"
-                  : "likes"}
-              </p>
-              <Button
-                style={{
-                  backgroundColor: "#543EE0",
-                  border: "none",
-                  color: "white",
-                }}
-                content={
-                  likeListVisible
-                    ? "Hide Post Like List"
-                    : "Show Post Like List"
-                }
-                onClick={toggleLikeListVisibility}
-              />
+              <p>Post likes</p>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <p>
+                  {post.likes?.length}{" "}
+                  <span>
+                    {post.likes?.length === 0 || post.likes?.length === 1
+                      ? "like"
+                      : "likes"}
+                  </span>
+                </p>
+                <span>
+                  <Button
+                    icon="angle down"
+                    style={{
+                      backgroundColor: "#543EE0",
+                      border: "none",
+                      color: "white",
+                    }}
+                    circular
+                    onClick={toggleLikeListVisibility}
+                  />
+                </span>
+              </div>
             </Header>
 
             <Divider hidden />
 
             <Transition.Group animation="slide down" duration={600}>
-              {likeListVisible && <PostLikeList key="likeList" post={post} />}
-            </Transition.Group>
-          </Grid.Column>
-
-          <Grid.Column width={16}>
-            <Header>
-              <p>
-                <Icon
-                  name="eye"
-                  style={{
-                    color: "#543EE0",
-                  }}
+              {likeListVisible && (
+                <PostLikeListModal
+                  post={post}
+                  open={likeListVisible}
+                  onClose={() => setLikeListVisible(false)}
                 />
-                {post.views?.length}{" "}
-                {post.views?.length === 0 || post.views?.length === 1
-                  ? "view"
-                  : "views"}
-              </p>
-            </Header>
-            <Button
-              style={{
-                backgroundColor: "#543EE0",
-                border: "none",
-                color: "white",
-              }}
-              content={
-                viewListVisible ? "Hide Post View List" : "Show Post View List"
-              }
-              onClick={toggleViewListVisibility}
-            />
-            <Divider hidden />
-            <Transition.Group animation="slide down" duration={800}>
-              {viewListVisible && <PostViewList key="viewList" post={post} />}
+              )}
             </Transition.Group>
-          </Grid.Column>
-        </Grid>
+          </div>
+          <div>
+            <Header>
+              <p>Post views</p>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <p>
+                  {post.views?.length}{" "}
+                  <span>
+                    {post.views?.length === 0 || post.views?.length === 1
+                      ? "view"
+                      : "views"}
+                  </span>
+                </p>
+                <span>
+                  <Button
+                    icon="angle down"
+                    style={{
+                      backgroundColor: "#543EE0",
+                      border: "none",
+                      color: "white",
+                    }}
+                    circular
+                    onClick={toggleViewListVisibility}
+                  />
+                </span>
+              </div>
+            </Header>
+
+            <Divider hidden />
+
+            <Transition.Group animation="slide down" duration={600}>
+              {viewListVisible && (
+                <PostViewListModal
+                  post={post}
+                  open={viewListVisible}
+                  onClose={() => setViewListVisible(false)}
+                />
+              )}
+            </Transition.Group>
+          </div>
+          <div>
+            <Header>
+              <p>Bookmarks</p>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <p>
+                  {post.bookmarks?.length}{" "}
+                  <span>
+                    {post.bookmarks?.length === 0 ||
+                    post.bookmarks?.length === 1
+                      ? "Bookmark"
+                      : "Bookmarks"}
+                  </span>
+                </p>
+                <span>
+                  <Button
+                    icon="angle down"
+                    style={{
+                      backgroundColor: "#543EE0",
+                      border: "none",
+                      color: "white",
+                    }}
+                    circular
+                    onClick={toggleBookmarksVisibility}
+                  />
+                </span>
+              </div>
+              <Divider hidden />
+              <Transition.Group animation="slide down" duration={800}>
+                {bookmarksVisible && (
+                  <PostBookmarkListModal
+                    post={post}
+                    open={bookmarksVisible}
+                    onClose={() => setBookmarksVisible(false)}
+                  />
+                )}
+              </Transition.Group>
+            </Header>
+          </div>
+        </div>
       </Segment>
     </>
   );

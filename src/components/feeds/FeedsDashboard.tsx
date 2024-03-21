@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "../../app/store/store";
 import { useCallback, useEffect, useState } from "react";
 import { actions } from "./feedSlice";
 import { useFireStore } from "../../app/hooks/firestore/useFirestore";
-import { Button } from "semantic-ui-react";
 import PostListItemPlaceholder from "./PostListItemPlaceholder";
 import { QueryOptions } from "../../app/hooks/firestore/types";
 import FeedFilters from "./FeedFilters";
@@ -47,8 +46,6 @@ export default function FeedsDashboard() {
     loadPosts();
   }
 
-  // if (status === "loading") return <LoadingComponent />;
-
   return (
     <div>
       {!loadedInitial ? (
@@ -63,14 +60,6 @@ export default function FeedsDashboard() {
             posts={posts || []}
             hasMore={hasMore.current}
             loadMore={loadMore}
-            loading={status === "loading"}
-          />
-
-          <Button
-            content="load"
-            color="black"
-            onClick={loadMore}
-            disabled={!hasMore.current}
             loading={status === "loading"}
           />
         </>

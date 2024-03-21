@@ -49,8 +49,8 @@ export default function SignupForm() {
         <GridColumn
           className="signup-background-img"
           computer={7}
-          tablet={12}
-          mobile={6}
+          tablet={6}
+          mobile={1}
           style={{
             padding: "0",
             border: "none",
@@ -86,7 +86,7 @@ export default function SignupForm() {
         <GridColumn
           style={{ padding: "0" }}
           computer={9}
-          tablet={12}
+          tablet={10}
           mobile={16}
         >
           <Tab

@@ -1,9 +1,9 @@
-import { MenuItem, Image, Button } from "semantic-ui-react";
+import { Image, Button } from "semantic-ui-react";
 import SignedOutButtons from "./SignedOutButtons";
 import { useAppSelector } from "../../app/store/store";
 import { signOut } from "firebase/auth";
 import { auth } from "../../app/config/firebase";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
@@ -17,7 +17,12 @@ export default function MobileNavMenu({ isOpen }: Props) {
     await signOut(auth);
     navigate("/");
   }
-
+  const scrollToSection = (id: any) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div
       className="mobile-nav-menu"
@@ -36,11 +41,18 @@ export default function MobileNavMenu({ isOpen }: Props) {
         padding: "2rem",
       }}
     >
-      <MenuItem>Home</MenuItem>
-      <MenuItem>About us</MenuItem>
-      <MenuItem>Contact</MenuItem>
-      <MenuItem>Blogs</MenuItem>
-
+      <NavLink to="#home" onClick={() => scrollToSection("home")}>
+        Home
+      </NavLink>
+      <NavLink to="#about" onClick={() => scrollToSection("about")}>
+        About us
+      </NavLink>
+      <NavLink to="#contact" onClick={() => scrollToSection("contact")}>
+        Contact
+      </NavLink>
+      <NavLink to="#blogs" onClick={() => scrollToSection("blogs")}>
+        Blogs
+      </NavLink>
       {authenticated ? (
         <>
           <Image

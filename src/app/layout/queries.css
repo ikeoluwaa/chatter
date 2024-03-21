@@ -2,6 +2,9 @@
   .home-page-container {
     width: 100%;
   }
+  .mobile-app-nav {
+    display: none;
+  }
 }
 @media (max-width: 75em) {
   html {
@@ -13,9 +16,28 @@
   .testimonia {
     width: 100%;
   }
+  .about-page-container {
+    width: 90%;
+  }
+
+  .footer-main-grid {
+    gap: 4rem;
+    align-items: center;
+  }
+  .footer-imgs.special {
+    justify-self: center;
+    top: 8rem;
+    right: 10rem;
+  }
+  .footer-imgs {
+    width: 10rem;
+  }
+  .mobile-app-nav {
+    display: none;
+  }
 }
 
-@media (max-width: 59em) {
+@media (max-width: 62em) {
   html {
     font-size: 50%;
   }
@@ -74,7 +96,7 @@
     overflow: hidden;
     position: relative;
   }
-  .main-nav {
+  .nav-links {
     display: none;
   }
   .nav-btn {
@@ -92,9 +114,31 @@
   .feed-header-p {
     font-size: 1rem;
   }
+
+  .testimonia img {
+    width: 26rem !important;
+    height: 26rem !important;
+  }
+  .footer-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    align-items: center;
+  }
+  .footer-group-image {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .footer-imgs.special {
+    position: static;
+  }
+  .signed-in-menu {
+    display: none;
+  }
 }
 
-@media (max-width: 45rem) {
+@media (max-width: 48rem) {
   .nav-container {
     width: 100%;
   }
@@ -138,6 +182,14 @@
   }
   .testimonia {
     width: 100%;
+  }
+  .testimonia-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  .testimonia img {
+    width: 10rem !important;
+    height: 10rem !important;
   }
   .why-header {
     font-size: 2.4rem;
@@ -197,6 +249,24 @@
   .ui.seven .wide .computer .six .wide .mobile .twelve .wide .tablet .column {
     display: none;
   }
+  .side-nav {
+    display: none !important;
+  }
+  .app-side-bar {
+    display: none !important;
+  }
+  .mobile-app-nav {
+    display: block !important;
+  }
+  .signup-background-img {
+    display: none !important;
+  }
+  .signed-in-menu {
+    display: none;
+  }
+  .slide-nav {
+    display: block !important;
+  }
 }
 @media (max-width: 35rem) {
   .nav-container {
@@ -251,11 +321,57 @@
     font-size: 0.4 !important;
   }
   .login {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
     padding: 1rem !important;
   }
   .register {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
     padding: 1rem !important;
+    width: fit-content;
+  }
+  .feed-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .media-button {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    background-color: transparent;
+  }
+  .media-button .icon {
+    display: flex;
+    font-size: 0.6rem !important;
+    align-items: center;
+  }
+  .buttons-divider {
+    border: 0.1px solid gray !important;
+    height: 8rem !important;
+  }
+  .media-buttons {
+  }
+  .post-form {
+    height: 100vh !important;
+  }
+  .side-nav {
+    display: none !important;
+  }
+  .mobile-app-nav {
+    display: block !important;
+  }
+  .feed-nav-buttons {
+    display: none;
+  }
+  .app-side-bar {
+    display: none !important;
+  }
+  .app-sliding-nav {
+    display: block;
+  }
+  .signed-in-menu {
+    display: none;
+  }
+  .slide-nav {
+    display: block !important;
   }
 }

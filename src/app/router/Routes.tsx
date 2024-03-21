@@ -9,6 +9,11 @@ import AccountPage from "../../features/auth/AccountPage";
 import ProfilePage from "../../features/profiles/ProfilePage";
 import RequireAuth from "./RequireAuth";
 import UnauthComponent from "../layout/UnauthComponent";
+import LoginForm from "../../features/auth/LoginForm";
+import RegisterForm from "../../features/auth/RegisterForm";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import NotFound from "../layout/NotFound";
+import ConfirmationMessage from "../../features/auth/ConfirmationMessage";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +44,17 @@ export const router = createBrowserRouter([
       { path: "/Scatch", element: <Scatch /> },
       { path: "/Scatch", element: <Scatch /> },
       { path: "/Likes", element: <Scatch /> },
+      { path: "/login", element: <LoginForm /> },
+      { path: "/register", element: <RegisterForm /> },
+      { path: "/confirmation", element: <ConfirmationMessage /> },
+      {
+        path: "*",
+        element: (
+          <ErrorBoundary>
+            <NotFound />
+          </ErrorBoundary>
+        ),
+      },
 
       { path: "/unauthorised", element: <UnauthComponent /> },
     ],

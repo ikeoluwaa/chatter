@@ -6,13 +6,13 @@ import { closeModal } from "./modalSlice";
 type Props = {
   children: ReactNode;
   header?: string;
-  contentStyle?: React.CSSProperties; // Rename style prop to contentStyle
+  contentStyle?: React.CSSProperties;
 } & ModalProps;
 
 export default function ModalWrapper({
   children,
   header,
-  contentStyle, // Rename style to contentStyle
+  contentStyle,
   ...props
 }: Props) {
   const { open } = useAppSelector((state) => state.modals);
@@ -20,6 +20,7 @@ export default function ModalWrapper({
   const dispatch = useAppDispatch();
   return (
     <Modal
+      closeIcon
       open={open}
       onClose={() => dispatch(closeModal())}
       size={props.size}

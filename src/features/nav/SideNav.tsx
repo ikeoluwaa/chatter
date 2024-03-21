@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { Menu, Header, Icon, Image } from "semantic-ui-react";
+import { Menu, Icon, Image, Header } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../app/config/firebase";
 import SignedOutButtons from "./SignedOutButtons";
 import { useAppSelector } from "../../app/store/store";
 
-export default function SideNav() {
+type Props = {
+  className?: string;
+};
+export default function SideNav({ className }: Props) {
   const { currentUser, authenticated } = useAppSelector((state) => state.auth);
   const [activeItem, setActiveItem] = useState("");
   const navigate = useNavigate();
@@ -28,14 +31,7 @@ export default function SideNav() {
         alignItems: "center",
       }}
     >
-      <Menu
-        vertical
-        style={{
-          display: "flex",
-          alignItems: "center",
-          border: "none",
-        }}
-      >
+      <Menu className={className} vertical>
         <Menu.Item>
           <Header
             as={Link}
@@ -58,31 +54,49 @@ export default function SideNav() {
               onClick={() => handleItemClick("Feed")}
               as={Link}
               to="/feeds"
-            />
-            <Menu.Item style={{ margin: "10px 0" }}>
-              <a>
-                <Icon name="bookmark" style={{ marginRight: "0.5em" }} />
-                Bookmarks
-              </a>
+            >
+              <Icon name="feed" />
+              Feed
             </Menu.Item>
-            <Menu.Item style={{ margin: "10px 0" }}>
-              {" "}
-              <a>
-                <Icon name="users" style={{ marginRight: "0.5em" }} />
-                Team Blogs
-              </a>
+            <Menu.Item
+              name="Bookmarks"
+              active={activeItem === "Bookmarks"}
+              onClick={() => handleItemClick("Bookmarks")}
+              as={Link}
+              to="/bookmarks"
+            >
+              <Icon name="bookmark" />
+              Bookmarks
             </Menu.Item>
-            <Menu.Item style={{ margin: "10px 0" }}>
-              <a>
-                <Icon name="envelope open" style={{ marginRight: "0.5em" }} />
-                Drafts
-              </a>
+            <Menu.Item
+              name="Team Blogs"
+              active={activeItem === "Team Blogs"}
+              onClick={() => handleItemClick("Team Blogs")}
+              as={Link}
+              to="/team-blogs"
+            >
+              <Icon name="users" />
+              Team Blogs
             </Menu.Item>
-            <Menu.Item style={{ margin: "10px 0" }}>
-              <a>
-                <Icon name="chart bar" style={{ marginRight: "0.5em" }} />
-                Analytics
-              </a>
+            <Menu.Item
+              name="Drafts"
+              active={activeItem === "Drafts"}
+              onClick={() => handleItemClick("Drafts")}
+              as={Link}
+              to="/drafts"
+            >
+              <Icon name="envelope open" />
+              Drafts
+            </Menu.Item>
+            <Menu.Item
+              name="Analytics"
+              active={activeItem === "Analytics"}
+              onClick={() => handleItemClick("Analytics")}
+              as={Link}
+              to="/analytics"
+            >
+              <Icon name="chart bar" />
+              Analytics
             </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
@@ -98,10 +112,8 @@ export default function SideNav() {
                   onClick={() => handleItemClick("Account")}
                   style={{ border: "none", margin: "10px 0" }}
                 >
-                  <a>
-                    <Icon name="user" style={{ marginRight: "0.5em" }} />
-                    Account
-                  </a>
+                  <Icon name="user" />
+                  Account
                 </Menu.Item>
                 <Menu.Item
                   as={Link}
@@ -110,10 +122,8 @@ export default function SideNav() {
                   onClick={() => handleItemClick("Profile")}
                   style={{ margin: "10px 0" }}
                 >
-                  <a>
-                    <Icon name="user circle" style={{ marginRight: "0.5em" }} />
-                    Profile
-                  </a>
+                  <Icon name="user circle" />
+                  Profile
                 </Menu.Item>
                 <Menu.Item style={{ margin: "10px 0" }}>
                   <Image
@@ -123,14 +133,11 @@ export default function SideNav() {
                   />
                 </Menu.Item>
                 <Menu.Item
-                  style={{ color: "red", margin: "10px 0" }}
                   onClick={handleSignOut}
-                  active={activeItem === "Logout"}
+                  style={{ color: "red", margin: "10px 0" }}
                 >
-                  <a>
-                    <Icon name="sign out" style={{ marginRight: "0.5em" }} />
-                    Log out
-                  </a>
+                  <Icon name="sign out" />
+                  Log out
                 </Menu.Item>
               </>
             ) : (
@@ -150,6 +157,7 @@ export default function SideNav() {
                     color: "white",
                     display: "flex",
                     flexDirection: "column",
+                    alignItems: "center",
                   }}
                 />
               </Menu.Item>

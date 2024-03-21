@@ -18,27 +18,34 @@ export default function WhyJoinContent() {
           </p>
         </div>
         <div className=" why-grid	">
-          <div className="why-list border-current		">
-            <div className="">
+          <div className="why-list-container border-current">
+            <div className="why-list">
               <Icon
                 name="line graph"
                 circular
                 inverted
-                color="blue"
-                size="large"
+                className="why-icon"
+                size="big"
+                style={{ backgroundColor: "#d6d1f8 !important" }}
               />
 
-              <h3 className="mb-4 font-medium	text-3xl	">Analytics </h3>
-              <p className="">
+              <h3>Analytics </h3>
+              <p>
                 Analytics to track the number of views, likes and comment and
                 also analyze the performance of your articles over a period of
                 time
               </p>
             </div>
           </div>
-          <div className="why-list">
-            <div className="">
-              <Icon name="users" circular inverted />
+          <div className="why-list-container">
+            <div className="why-list">
+              <Icon
+                name="group"
+                circular
+                inverted
+                className="why-icon"
+                size="big"
+              />
               <h3 className="">Social interactions</h3>
               <p>
                 Users on the platform can interact with posts they like, comment
@@ -46,12 +53,18 @@ export default function WhyJoinContent() {
               </p>
             </div>
           </div>
-          <div className="why-list">
-            <div className="p-8">
-              <Icon />
+          <div className="why-list-container">
+            <div className="why-list">
+              <Icon
+                name="newspaper"
+                className="why-icon"
+                circular
+                inverted
+                size="big"
+              />
 
-              <h3 className="mb-4 font-medium	text-3xl	">Content creation</h3>
-              <p className="mb-0 ">
+              <h3>Content creation</h3>
+              <p>
                 Write nice and appealing with our in-built markdown, a rich text
                 editor
               </p>
@@ -62,7 +75,13 @@ export default function WhyJoinContent() {
       <div className="testimonia">
         <div className="testimonia-grid">
           <div>
-            <Image src="join.jpg" alt="" size="medium" circular />
+            <Image
+              className="testimonia-img"
+              src="join.jpg"
+              alt=""
+              size="medium"
+              circular
+            />
           </div>
           <div style={{ padding: "3.8rem" }}>
             <p style={{ fontSize: "1.4rem", marginBottom: "3rem" }}>

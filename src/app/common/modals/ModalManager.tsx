@@ -2,8 +2,10 @@ import { useAppSelector } from "../../store/store";
 import LoginForm from "../../../features/auth/LoginForm";
 import TestModal from "../../../features/scratch/TestModal";
 import RegisterForm from "../../../features/auth/RegisterForm";
-import PostFeedComment from "../../../components/feeds/PostFeedComment";
+import PostFeedComment from "../../../components/feeds/CommentsModal";
 import SignupForm from "../../../features/auth/SignupForm";
+import PostComments from "../../../components/feeds/details/PostComments";
+import ConfirmationMessage from "../../../features/auth/ConfirmationMessage";
 
 export default function ModalManager() {
   const modalLookup = {
@@ -12,6 +14,8 @@ export default function ModalManager() {
     RegisterForm,
     PostFeedComment,
     SignupForm,
+    PostComments,
+    ConfirmationMessage,
   };
 
   const { type, data, open } = useAppSelector((state) => state.modals);

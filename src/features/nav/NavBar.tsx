@@ -14,44 +14,62 @@ export default function NavBar() {
     setMenuOpen(!menuOpen);
   };
 
+  const scrollToSection = (id: any) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setMenuOpen(false);
+  };
+
   return (
     <div className="nav-container" style={{ position: "sticky" }}>
       <header>
-        <h1 className="font-bold text-4xl">CHATTER</h1>
+        <h1 style={{ color: "#543EE0" }} className="font-bold text-4xl">
+          CHATTER
+        </h1>
       </header>
-      <nav className="main-nav">
-        <div className="nav-links">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/about">About us</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
-          <NavLink to="/blogs">Blogs</NavLink>
-          <NavLink to="/scatch">Scatch</NavLink>
+
+      <div className="nav-links">
+        <NavLink to="#home" onClick={() => scrollToSection("home")}>
+          Home
+        </NavLink>
+        <NavLink to="#about" onClick={() => scrollToSection("about")}>
+          About us
+        </NavLink>
+        <NavLink to="#contact" onClick={() => scrollToSection("contact")}>
+          Contact
+        </NavLink>
+        <NavLink to="#blogs" onClick={() => scrollToSection("blogs")}>
+          Blogs
+        </NavLink>
+      </div>
+
+      {authenticated ? (
+        <SignedInMenu />
+      ) : (
+        <div className="nav-btn">
+          <SignedOutButtons
+            menuItemStyle={{
+              display: "flex",
+              gap: "1rem",
+            }}
+            registerButtonStyle={{
+              border: " 1px solid #543ee0",
+              backgroundColor: "#543ee0",
+              color: "white",
+              padding: "0.8rem 2rem ",
+            }}
+            loginButtonStyle={{
+              border: " 1px solid #543ee0",
+              backgroundColor: "#FFF",
+              color: "#543ee0",
+              padding: "0.8rem 2rem ",
+            }}
+          />
         </div>
-        {authenticated ? (
-          <SignedInMenu />
-        ) : (
-          <div className="nav-buttons">
-            <SignedOutButtons
-              menuItemStyle={{
-                display: "flex",
-                gap: "1rem",
-              }}
-              registerButtonStyle={{
-                border: " 1px solid #543ee0",
-                backgroundColor: "#543ee0",
-                color: "white",
-                padding: "0.8rem 2rem ",
-              }}
-              loginButtonStyle={{
-                border: " 1px solid #543ee0",
-                backgroundColor: "#FFF",
-                color: "#543ee0",
-                padding: "0.8rem 2rem ",
-              }}
-            />
-          </div>
-        )}
-      </nav>
+      )}
+
       <button
         className="mobile-nav"
         onClick={toggleMenu}
@@ -60,7 +78,7 @@ export default function NavBar() {
           transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)",
         }}
       >
-        {menuOpen ? <Icon name="close" /> : <Icon name="align justify" />}
+        {menuOpen ? <Icon name="close" /> : <Icon name="bars" />}
       </button>
       <MobileNavMenu isOpen={menuOpen} />
     </div>

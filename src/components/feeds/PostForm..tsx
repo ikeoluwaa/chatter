@@ -5,20 +5,25 @@ import {
   Divider,
   Form,
   Icon,
-  Segment,
   Image,
   TextArea,
+  Loader,
 } from "semantic-ui-react";
 import { useAppSelector } from "../../app/store/store";
 import { FieldValues, useForm } from "react-hook-form";
 import { AppFeed } from "../../app/types/feeds";
 import { toast } from "react-toastify";
 import { useFireStore } from "../../app/hooks/firestore/useFirestore";
-import { actions } from "./feedSlice";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { arrayUnion } from "firebase/firestore";
 import { storage } from "../../app/config/firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  UploadTaskSnapshot,
+} from "firebase/storage";
+import { actions } from "./feedSlice";
 
 export default function PostForm() {
   const { loadDocument, create, update } = useFireStore("posts");
@@ -37,6 +42,7 @@ export default function PostForm() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [showMediaButtons, setShowMediaButtons] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -79,14 +85,20 @@ export default function PostForm() {
       }),
       likedBYIds: arrayUnion(currentUser.uid),
       viewedByIds: arrayUnion(currentUser.uid),
+      bookmarkedIds: arrayUnion(currentUser.uid),
+
       date: currentDate,
     });
 
     return ref;
   }
 
-  async function handlePostSubmit(data: FieldValues) {
+  const handlePostSubmit = async (data: FieldValues) => {
     try {
+      if (!isValid) {
+        return; // Don't submit if the form is invalid
+      }
+
       if (post) {
         await editPost({ ...post, ...data });
         navigate(`/posts/${post.id}`);
@@ -102,8 +114,7 @@ export default function PostForm() {
       toast.error(error.message);
       console.log(error.message);
     }
-    console.log(data);
-  }
+  };
 
   const toggleMediaButtons = () => {
     setShowMediaButtons(!showMediaButtons);
@@ -112,12 +123,16 @@ export default function PostForm() {
   const handlePictureSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    event.preventDefault();
     const file = event.target.files?.[0];
     if (file) {
       try {
         const storageRef = ref(storage, `${currentUser?.uid}/post_image/${id}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-        const snapshot = await uploadBytesResumable(storageRef, file);
+        setUploadingImage(true);
+
+        const snapshot: UploadTaskSnapshot = await uploadTask;
 
         const imageUrl = await getDownloadURL(snapshot.ref);
 
@@ -128,6 +143,8 @@ export default function PostForm() {
       } catch (error) {
         console.error("Error uploading image to Firebase Storage:", error);
         toast.error("Error uploading image. Please try again.");
+      } finally {
+        setUploadingImage(false);
       }
     }
   };
@@ -135,45 +152,60 @@ export default function PostForm() {
   const handleVideoSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    event.preventDefault();
+
     const file = event.target.files?.[0];
     if (file) {
       try {
-        // Create a reference to the storage bucket
         const storageRef = ref(
           storage,
           `${currentUser?.uid}/post_video/${id}/${file.name}`
         );
 
-        // Upload file to Firebase Storage
-        const snapshot = await uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-        // Get the download URL of the uploaded video
+        // Show loading spinner while uploading
+        setUploadingImage(true);
+
+        const snapshot: UploadTaskSnapshot = await uploadTask;
+
         const videoUrl = await getDownloadURL(snapshot.ref);
 
-        // Set the selected video URL in state and form value
         setSelectedVideo(videoUrl);
         setValue("postVideoURL", videoUrl);
 
-        // Close the media buttons section
         setShowMediaButtons(false);
       } catch (error) {
         console.error("Error uploading video to Firebase Storage:", error);
         toast.error("Error uploading video. Please try again.");
+      } finally {
+        setUploadingImage(false);
       }
     }
   };
 
   if (status === "loading") return <LoadingComponent />;
   return (
-    <Segment>
+    <div
+      className="container"
+      style={{ border: "1px solid black", height: "100%" }}
+    >
       <Form
-        onSubmit={handleSubmit(handlePostSubmit)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit(handlePostSubmit)();
+        }}
         className="post-form"
-        style={{ padding: "2rem", border: "none" }}
+        style={{
+          padding: "2rem",
+          border: "none",
+          width: "100%",
+          height: "100%",
+        }}
       >
         <input
           type="hidden"
-          defaultValue={post?.date || new Date().toISOString()} // Use current date if post.date is undefined or falsy
+          defaultValue={post?.date || new Date().toISOString()}
           {...register("date")}
         />
         <Button
@@ -183,7 +215,7 @@ export default function PostForm() {
           }}
           as={Link}
           to="/feeds"
-          className="media-button"
+          className="cancel-button"
           disabled={isSubmitting}
           content=" Cancel"
         />
@@ -214,7 +246,7 @@ export default function PostForm() {
                 width: "4rem",
                 height: "4rem",
                 backgroundColor: "transparent",
-                border: "1px solid black",
+                border: "0.4px solid black",
                 marginTop: "2rem",
               }}
               circular
@@ -230,18 +262,21 @@ export default function PostForm() {
               <div className="media-buttons">
                 <div className="media-button-group" style={{ display: "flex" }}>
                   <Divider
+                    className="buttons-divider"
                     style={{
                       color: "blue",
-                      border: "1px solid black",
+                      border: "0.09px solid black",
                       height: "10rem",
                       marginTop: "0",
                     }}
                   />
 
-                  {/* Picture Input */}
                   <Button
+                    icon="picture"
                     style={{
-                      color: "blue",
+                      backgroundColor: "transparent",
+                      border: "0.4px solid #543ee0",
+                      color: " #543ee0",
                       width: "4rem",
                       height: "4rem",
                       textAlign: "center",
@@ -249,10 +284,11 @@ export default function PostForm() {
                     }}
                     circular
                     className="media-button"
-                    onClick={() => pictureInputRef.current?.click()}
-                  >
-                    <Icon name="picture" />
-                  </Button>
+                    onClick={(event) => {
+                      event.preventDefault(); // Prevent default form submission
+                      pictureInputRef.current?.click();
+                    }}
+                  ></Button>
                   <input
                     type="file"
                     accept="image/*"
@@ -262,10 +298,12 @@ export default function PostForm() {
                     onChange={handlePictureSelect}
                   />
 
-                  {/* Video Input */}
                   <Button
+                    icon="video"
                     style={{
-                      color: "blue",
+                      backgroundColor: "transparent",
+                      border: "0.4px solid #543ee0",
+                      color: " #543ee0",
                       width: "4rem",
                       height: "4rem",
                       textAlign: "center",
@@ -273,10 +311,11 @@ export default function PostForm() {
                     }}
                     circular
                     className="media-button"
-                    onClick={() => videoInputRef.current?.click()}
-                  >
-                    <Icon name="video" />
-                  </Button>
+                    onClick={(event) => {
+                      event.preventDefault(); // Prevent default form submission
+                      pictureInputRef.current?.click();
+                    }}
+                  ></Button>
                   <input
                     type="file"
                     accept="video/*"
@@ -308,6 +347,7 @@ export default function PostForm() {
                     src={selectedImage}
                     alt="Selected Image"
                     className="selected-image"
+                    size="big"
                   />
                 </div>
               )}
@@ -319,6 +359,7 @@ export default function PostForm() {
                   </video>
                 </div>
               )}
+              {uploadingImage && <Loader active inline="centered" />}
               <Form.Input
                 style={{ fontSize: "2rem" }}
                 className="input-field"
@@ -329,9 +370,11 @@ export default function PostForm() {
               />
               <TextArea
                 style={{
+                  height: "",
                   border: "none",
-                  minHeight: "10rem",
-                  fontSize: "1.8rem",
+                  fontSize: "1rem",
+                  resize: "vertical",
+                  overflowY: "auto",
                 }}
                 className="textarea-field"
                 placeholder="Write a post......"
@@ -342,6 +385,6 @@ export default function PostForm() {
           </div>
         </div>
       </Form>
-    </Segment>
+    </div>
   );
 }

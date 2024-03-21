@@ -56,9 +56,10 @@ export default function LoginForm() {
     >
       <Grid style={{ background: "transparent", margin: "0" }}>
         <GridColumn
+          className="signup-background-img"
           computer={6}
-          tablet={12}
-          mobile={16}
+          tablet={6}
+          mobile={1}
           style={{
             backgroundImage:
               "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/signin.jpg')",
@@ -72,7 +73,7 @@ export default function LoginForm() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              marginLeft: "2rem",
+              margin: "auto 0",
             }}
           >
             <h1
@@ -94,7 +95,7 @@ export default function LoginForm() {
 
         <GridColumn
           computer={10}
-          tablet={12}
+          tablet={10}
           mobile={16}
           style={{ background: "white", padding: "3rem" }}
         >

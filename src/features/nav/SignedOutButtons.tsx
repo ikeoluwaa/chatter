@@ -1,4 +1,4 @@
-import { MenuItem } from "semantic-ui-react";
+import { Button, MenuItem } from "semantic-ui-react";
 import { useAppDispatch } from "../../app/store/store";
 import { openModal } from "../../app/common/modals/modalSlice";
 
@@ -16,20 +16,20 @@ export default function SignedOutButtons({
   const dispatch = useAppDispatch();
   return (
     <MenuItem position="right" style={menuItemStyle}>
-      <button
+      <Button
         className="ui button login"
         style={loginButtonStyle}
         onClick={() => dispatch(openModal({ type: "LoginForm" }))}
       >
         Log in
-      </button>
-      <button
+      </Button>
+      <Button
         className="ui button register"
         style={registerButtonStyle}
         onClick={() => dispatch(openModal({ type: "RegisterForm" }))}
       >
         Sign up
-      </button>
+      </Button>
     </MenuItem>
   );
 }
