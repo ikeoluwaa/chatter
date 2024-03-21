@@ -29,7 +29,7 @@ export default function PostBookmarkList({ post }: Props) {
         inverted
       >
         {bookmarksCount === 0
-          ? "No Views yet"
+          ? ""
           : bookmarksCount === 1
             ? "1 Person Viewed This Post"
             : `${bookmarksCount} People Viewed This Post`}

@@ -12,7 +12,7 @@ type Props = {
 export default function PostBookmarkListModal({ post, open, onClose }: Props) {
   return (
     <Modal closeIcon open={open} onClose={onClose}>
-      <Modal.Header>Post View List</Modal.Header>
+      <Modal.Header>Post Bookmarks</Modal.Header>
       <Modal.Content>
         <PostBookmarkList post={post} />
       </Modal.Content>
